@@ -34,7 +34,7 @@ class GameAI {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
 
-                    let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights);
+                    let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
 
                     if(treeHeight === 0 && moveValue > best) {
                         this.movingKnight = knight;
@@ -58,7 +58,7 @@ class GameAI {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
 
-                let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights);
+                let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
                 
                 beta = Math.min(beta, moveValue);
                 if(beta >= alpha) {
