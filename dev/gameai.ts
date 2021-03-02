@@ -26,7 +26,7 @@ class GameAI {
             return score[0];
         }
         
-        if (isMax) {
+        if (isMax) { // Flip
             let best = -Infinity // Flip
             knights.forEach((knight, knightIndex) => {
                 let validMoves = knight.getMoves(gameState.knightPositions[knightIndex]);
