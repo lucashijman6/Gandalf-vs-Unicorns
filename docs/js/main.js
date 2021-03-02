@@ -223,8 +223,8 @@ class GameAI {
     static moveKnight(king, knights, gameState) {
         let t0 = performance.now();
         this.minimax(this.treeHeight, true, gameState, Infinity, -Infinity, king, knights);
-        knights[this.movingKnight].setPosition(this.bestMove);
-        gameState.knightPositions[this.movingKnight] = this.bestMove;
+        this.movingKnight.setPosition(this.bestMove);
+        gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
         let t1 = performance.now();
         console.log("AI move took " + (t1 - t0) + " milliseconds.");
     }
@@ -242,7 +242,7 @@ class GameAI {
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
                     let moveValue = this.minimax(treeHeight - 1, false, gameStateCopy, alpha, beta, king, knights);
                     if (treeHeight === this.treeHeight && moveValue > best) {
-                        this.movingKnight = knightIndex;
+                        this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
                     alpha = Math.max(alpha, moveValue);
