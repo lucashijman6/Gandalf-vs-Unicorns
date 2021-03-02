@@ -2,7 +2,7 @@
 /// <reference path="tile.ts" />
 
 class GameAI {
-    public static treeHeight: number = 7;
+    public static maxTreeHeight: number = 7;
     public static bestMove: [number, number];
     public static movingKnight: Knight;
 
@@ -10,7 +10,7 @@ class GameAI {
         let t0 = performance.now();
 
         // Call the minimax function to start the AI
-        this.minimax(this.treeHeight, true, gameState, Infinity, -Infinity, king, knights);
+        this.minimax(0, true, gameState, Infinity, -Infinity, king, knights);
 
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
@@ -22,7 +22,7 @@ class GameAI {
     public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, alpha: number, beta: number, king: King, knights: Knight[]): number {
         let score = gameState.getScore();
 
-        if(score[1] || treeHeight === 0) {
+        if(score[1] || treeHeight === this.maxTreeHeight) {
             return score[0];
         }
         
@@ -34,9 +34,9 @@ class GameAI {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
 
-                    let moveValue = this.minimax(treeHeight - 1, false, gameStateCopy, alpha, beta, king, knights);
+                    let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights);
 
-                    if(treeHeight === this.treeHeight && moveValue > best) {
+                    if(treeHeight === 0 && moveValue > best) {
                         this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
@@ -58,7 +58,7 @@ class GameAI {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
 
-                let moveValue = this.minimax(treeHeight - 1, true, gameStateCopy, alpha, beta, king, knights);
+                let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights);
                 
                 beta = Math.min(beta, moveValue);
                 if(beta >= alpha) {
