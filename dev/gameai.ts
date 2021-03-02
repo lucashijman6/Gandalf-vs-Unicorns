@@ -41,7 +41,7 @@ class GameAI {
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
 
-                    alpha = Math.max(alpha, moveValue);
+                    alpha = Math.max(alpha, moveValue); // Flip
                     if(beta >= alpha) { // Flip
                         break;
                     }
@@ -60,7 +60,7 @@ class GameAI {
 
                 let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight; // Flip
                 
-                beta = Math.min(beta, moveValue);
+                beta = Math.min(beta, moveValue); // Flip
                 if(beta >= alpha) { // Flip
                     break;
                 }
