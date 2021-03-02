@@ -222,7 +222,7 @@ window.customElements.define("knight-component", Knight);
 class GameAI {
     static moveKnight(king, knights, gameState) {
         let t0 = performance.now();
-        this.minimax(this.treeHeight, true, gameState, Infinity, -Infinity, king, knights);
+        this.minimax(0, true, gameState, Infinity, -Infinity, king, knights);
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
         let t1 = performance.now();
@@ -230,7 +230,7 @@ class GameAI {
     }
     static minimax(treeHeight, isMax, gameState, alpha, beta, king, knights) {
         let score = gameState.getScore();
-        if (score[1] || treeHeight === 0) {
+        if (score[1] || treeHeight === this.maxTreeHeight) {
             return score[0];
         }
         if (isMax) {
@@ -240,8 +240,8 @@ class GameAI {
                 for (let i = 0; i < validMoves.length; i++) {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
-                    let moveValue = this.minimax(treeHeight - 1, false, gameStateCopy, alpha, beta, king, knights);
-                    if (treeHeight === this.treeHeight && moveValue > best) {
+                    let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights);
+                    if (treeHeight === 0 && moveValue > best) {
                         this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
@@ -260,7 +260,7 @@ class GameAI {
             for (let i = 0; i < validMoves.length; i++) {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
-                let moveValue = this.minimax(treeHeight - 1, true, gameStateCopy, alpha, beta, king, knights);
+                let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights);
                 beta = Math.min(beta, moveValue);
                 if (beta >= alpha) {
                     break;
@@ -271,7 +271,7 @@ class GameAI {
         }
     }
 }
-GameAI.treeHeight = 7;
+GameAI.maxTreeHeight = 7;
 class King extends ChessPiece {
     getMoves(from = this.boardPosition) {
         let moves = [];
