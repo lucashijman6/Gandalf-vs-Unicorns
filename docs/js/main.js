@@ -248,15 +248,15 @@ class GameAI {
         }
         else {
             let bestValueForPlayer = Infinity;
-            knights.forEach((knight, knightIndex) => {
-                let validMoves = knight.getMoves(gameState.knightPositions[knightIndex]);
-                for (let i = 0; i < validMoves.length; i++) {
+            for (let i = 0; i < knights.length; i++) {
+                let validMoves = knights[i].getMoves(gameState.knightPositions[i]);
+                for (let j = 0; j < validMoves.length; j++) {
                     let gameStateCopy = gameState.copy();
-                    gameStateCopy.knightPositions[knightIndex] = validMoves[i];
+                    gameStateCopy.knightPositions[i] = validMoves[j];
                     let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
                     if (treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
-                        this.movingKnight = knight;
-                        this.bestMove = gameStateCopy.knightPositions[knightIndex];
+                        this.movingKnight = knights[i];
+                        this.bestMove = gameStateCopy.knightPositions[i];
                     }
                     alpha = Math.min(alpha, currentMoveValue);
                     if (beta <= alpha) {
@@ -264,7 +264,7 @@ class GameAI {
                     }
                     bestValueForPlayer = Math.min(bestValueForPlayer, currentMoveValue);
                 }
-            });
+            }
             return bestValueForPlayer;
         }
     }
