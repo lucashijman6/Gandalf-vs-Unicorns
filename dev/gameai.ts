@@ -62,7 +62,6 @@ class GameAI {
 
                     // Check if it's the current turn
                     // Check if current move is better than the previous best
-                    
                     if(treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
                         // If both are the case, save the knight that moves and the move itself
                         this.movingKnight = knights[i];
