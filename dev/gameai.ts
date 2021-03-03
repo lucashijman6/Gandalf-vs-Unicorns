@@ -10,7 +10,7 @@ class GameAI {
         let t0 = performance.now();
 
         // Call the minimax function to start the AI
-        this.minimax(0, true, gameState, Infinity, -Infinity, king, knights); // Flip
+        this.minimax(0, false, gameState, -Infinity, Infinity, king, knights); // Flip
 
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
@@ -26,46 +26,46 @@ class GameAI {
             return score[0];
         }
         
-        if (isMax) { // Flip
-            let best = -Infinity // Flip
+        if (!isMax) {
+            let best = Infinity
             knights.forEach((knight, knightIndex) => {
                 let validMoves = knight.getMoves(gameState.knightPositions[knightIndex]);
                 for(let i = 0; i < validMoves.length; i++) {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
 
-                    let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight; // Flip
+                    let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
 
-                    if(treeHeight === 0 && moveValue > best) { // Flip
+                    if(treeHeight === 0 && moveValue < best) {
                         this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
 
-                    alpha = Math.max(alpha, moveValue); // Flip
-                    if(beta >= alpha) { // Flip
+                    alpha = Math.min(alpha, moveValue);
+                    if(beta <= alpha) {
                         break;
                     }
 
-                    best = Math.max(best, moveValue); // Flip
+                    best = Math.min(best, moveValue);
                 }
             })
 
             return best;
         } else {
-            let worst = Infinity; // Flip
+            let worst = -Infinity;
             let validMoves = king.getMoves(gameState.kingPos);
             for(let i = 0; i < validMoves.length; i++) {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
 
-                let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight; // Flip
+                let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
                 
-                beta = Math.min(beta, moveValue); // Flip
-                if(beta >= alpha) { // Flip
+                beta = Math.max(beta, moveValue);
+                if(beta <= alpha) {
                     break;
                 }
                 
-                worst = Math.min(worst, moveValue); // Flip
+                worst = Math.max(worst, moveValue);
             }
 
             return worst;
