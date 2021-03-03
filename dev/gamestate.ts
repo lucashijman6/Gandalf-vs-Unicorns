@@ -13,16 +13,16 @@ class GameState {
         // game over
         for (let z of this.knightPositions) {
             if (Board.samePosition(z, this.kingPos)) {
-                return [100, true];
+                return [-100, true];
             }
         }
 
         // win
         if (this.kingPos[1] == 0) {
-            return[-100, true];
+            return[100, true];
         } 
 
-        return [this.kingPos[1], false]
+        return [this.kingPos[1] * -1, false]
     }
 
     
