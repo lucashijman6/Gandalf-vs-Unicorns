@@ -10,7 +10,7 @@ class GameAI {
         let t0 = performance.now();
 
         // Call the minimax function to start the AI
-        this.minimax(0, false, gameState, -Infinity, Infinity, king, knights);
+        this.minimax(0, false, gameState, /*-Infinity, Infinity, */king, knights);
 
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
@@ -19,7 +19,7 @@ class GameAI {
         console.log("AI move took " + (t1 - t0) + " milliseconds.");
     }
     
-    public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, alpha: number, beta: number, king: King, knights: Knight[]): number {
+    public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, /*alpha: number, beta: number, */king: King, knights: Knight[]): number {
         let score = gameState.getScore();
 
         // Check if the game is over
@@ -36,12 +36,12 @@ class GameAI {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
 
-                let currentMoveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
+                let currentMoveValue = this.minimax(treeHeight + 1, false, gameStateCopy, /*alpha, beta, */king, knights) - treeHeight;
                 
-                beta = Math.max(beta, currentMoveValue);
-                if(beta <= alpha) {
-                    break;
-                }
+                // alpha = Math.max(alpha, currentMoveValue);
+                // if(alpha <= beta) {
+                //     break;
+                // }
                 
                 bestValueForPlayer = Math.max(bestValueForPlayer, currentMoveValue);
             }
@@ -55,7 +55,7 @@ class GameAI {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[i] = validMoves[j];
 
-                    let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
+                    let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy/*, alpha, beta, */, king, knights) + treeHeight;
 
                     // Check if it's the current turn
                     // Check if current move is better than the previous best
@@ -66,10 +66,10 @@ class GameAI {
                         this.bestMove = gameStateCopy.knightPositions[i];
                     }
 
-                    alpha = Math.min(alpha, currentMoveValue);
-                    if(beta <= alpha) {
-                        break;
-                    }
+                    // beta = Math.min(beta, currentMoveValue);
+                    // if(alpha <= beta) {
+                    //     break;
+                    // }
 
                     bestValueForPlayer = Math.min(bestValueForPlayer, currentMoveValue);
                 }
