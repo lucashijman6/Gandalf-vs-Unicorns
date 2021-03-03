@@ -10,7 +10,7 @@ class GameAI {
         let t0 = performance.now();
 
         // Call the minimax function to start the AI
-        this.minimax(0, false, gameState, -Infinity, Infinity, king, knights); // Flip
+        this.minimax(0, false, gameState, /*-Infinity, Infinity, */king, knights);
 
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
@@ -19,9 +19,12 @@ class GameAI {
         console.log("AI move took " + (t1 - t0) + " milliseconds.");
     }
     
-    public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, alpha: number, beta: number, king: King, knights: Knight[]): number {
+    public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, /*alpha: number, beta: number, */king: King, knights: Knight[]): number {
         let score = gameState.getScore();
 
+        // Check if the game is over
+        // Check if the leaf has been reached
+        // If either or is the case, return the score of the future game state
         if(score[1] || treeHeight === this.maxTreeHeight) {
             return score[0];
         }
@@ -29,44 +32,50 @@ class GameAI {
         if (isMax) {
             let bestValueForPlayer = -Infinity;
             let validMoves = king.getMoves(gameState.kingPos);
+
             for(let i = 0; i < validMoves.length; i++) {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
 
-                let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
+                let currentMoveValue = this.minimax(treeHeight + 1, false, gameStateCopy, /*alpha, beta, */king, knights) - treeHeight;
                 
-                beta = Math.max(beta, moveValue);
-                if(beta <= alpha) {
-                    break;
-                }
+                // alpha = Math.max(alpha, currentMoveValue);
+                // if(alpha <= beta) {
+                //     break;
+                // }
                 
-                bestValueForPlayer = Math.max(bestValueForPlayer, moveValue);
+                bestValueForPlayer = Math.max(bestValueForPlayer, currentMoveValue);
             }
 
             return bestValueForPlayer;
         } else {
             let bestValueForPlayer = Infinity
-            knights.forEach((knight, knightIndex) => {
-                let validMoves = knight.getMoves(gameState.knightPositions[knightIndex]);
-                for(let i = 0; i < validMoves.length; i++) {
+
+            for(let i = 0; i < knights.length; i++) {
+                let validMoves = knights[i].getMoves(gameState.knightPositions[i]);
+
+                for(let j = 0; j < validMoves.length; j++) {
                     let gameStateCopy = gameState.copy();
-                    gameStateCopy.knightPositions[knightIndex] = validMoves[i];
+                    gameStateCopy.knightPositions[i] = validMoves[j];
 
-                    let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
+                    let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy/*, alpha, beta, */, king, knights) + treeHeight;
 
-                    if(treeHeight === 0 && moveValue < bestValueForPlayer) {
-                        this.movingKnight = knight;
-                        this.bestMove = gameStateCopy.knightPositions[knightIndex];
+                    // Check if it's the current turn
+                    // Check if current move is better than the previous best
+                    if(treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
+                        // If both are the case, save the knight that moves and the move itself
+                        this.movingKnight = knights[i];
+                        this.bestMove = validMoves[j];
                     }
 
-                    alpha = Math.min(alpha, moveValue);
-                    if(beta <= alpha) {
-                        break;
-                    }
+                    // beta = Math.min(beta, currentMoveValue);
+                    // if(alpha <= beta) {
+                    //     break;
+                    // }
 
-                    bestValueForPlayer = Math.min(bestValueForPlayer, moveValue);
+                    bestValueForPlayer = Math.min(bestValueForPlayer, currentMoveValue);
                 }
-            })
+            }
 
             return bestValueForPlayer;
         }
