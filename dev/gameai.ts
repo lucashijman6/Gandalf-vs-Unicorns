@@ -22,6 +22,9 @@ class GameAI {
     public static minimax(treeHeight: number, isMax: boolean, gameState: GameState, alpha: number, beta: number, king: King, knights: Knight[]): number {
         let score = gameState.getScore();
 
+        // Check if the game is over
+        // Check if the leaf has been reached
+        // If either or is the case, return the score of the future game state
         if(score[1] || treeHeight === this.maxTreeHeight) {
             return score[0];
         }
@@ -54,7 +57,11 @@ class GameAI {
 
                     let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
 
+                    // Check if it's the current turn
+                    // Check if current move is better than the previous best
+                    
                     if(treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
+                        // If both are the case, save the knight that moves and the move itself
                         this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
