@@ -32,6 +32,7 @@ class GameAI {
         if (isMax) {
             let bestValueForPlayer = -Infinity;
             let validMoves = king.getMoves(gameState.kingPos);
+
             for(let i = 0; i < validMoves.length; i++) {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
@@ -49,8 +50,10 @@ class GameAI {
             return bestValueForPlayer;
         } else {
             let bestValueForPlayer = Infinity
+
             for(let i = 0; i < knights.length; i++) {
                 let validMoves = knights[i].getMoves(gameState.knightPositions[i]);
+
                 for(let j = 0; j < validMoves.length; j++) {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[i] = validMoves[j];
