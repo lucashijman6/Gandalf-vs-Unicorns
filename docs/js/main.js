@@ -237,12 +237,12 @@ class GameAI {
             for (let i = 0; i < validMoves.length; i++) {
                 let gameStateCopy = gameState.copy();
                 gameStateCopy.kingPos = validMoves[i];
-                let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
-                beta = Math.max(beta, moveValue);
+                let currentMoveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
+                beta = Math.max(beta, currentMoveValue);
                 if (beta <= alpha) {
                     break;
                 }
-                bestValueForPlayer = Math.max(bestValueForPlayer, moveValue);
+                bestValueForPlayer = Math.max(bestValueForPlayer, currentMoveValue);
             }
             return bestValueForPlayer;
         }
@@ -253,16 +253,16 @@ class GameAI {
                 for (let i = 0; i < validMoves.length; i++) {
                     let gameStateCopy = gameState.copy();
                     gameStateCopy.knightPositions[knightIndex] = validMoves[i];
-                    let moveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
-                    if (treeHeight === 0 && moveValue < bestValueForPlayer) {
+                    let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy, alpha, beta, king, knights) + treeHeight;
+                    if (treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
                         this.movingKnight = knight;
                         this.bestMove = gameStateCopy.knightPositions[knightIndex];
                     }
-                    alpha = Math.min(alpha, moveValue);
+                    alpha = Math.min(alpha, currentMoveValue);
                     if (beta <= alpha) {
                         break;
                     }
-                    bestValueForPlayer = Math.min(bestValueForPlayer, moveValue);
+                    bestValueForPlayer = Math.min(bestValueForPlayer, currentMoveValue);
                 }
             });
             return bestValueForPlayer;
