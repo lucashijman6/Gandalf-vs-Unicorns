@@ -10,7 +10,7 @@ class GameAI {
         let t0 = performance.now();
 
         // Call the minimax function to start the AI
-        this.minimax(0, false, gameState, -Infinity, Infinity, king, knights); // Flip
+        this.minimax(0, false, gameState, -Infinity, Infinity, king, knights);
 
         this.movingKnight.setPosition(this.bestMove);
         gameState.knightPositions[knights.indexOf(this.movingKnight)] = this.bestMove;
