@@ -170,11 +170,9 @@ class Game {
             }
         }
         if ((this.playerTurn) && (!moving) && (!this.gameOver)) {
-            console.log(boardPos);
             let legalMoves = this.king.getMoves();
             for (let m of legalMoves) {
                 if (Board.samePosition(m, boardPos)) {
-                    console.log("legal move");
                     this.king.setPosition(boardPos);
                     this.gameState.kingPos = boardPos;
                     this.playerTurn = false;
@@ -233,7 +231,22 @@ class GameAI {
         if (score[1] || treeHeight === this.maxTreeHeight) {
             return score[0];
         }
-        if (!isMax) {
+        if (isMax) {
+            let worst = -Infinity;
+            let validMoves = king.getMoves(gameState.kingPos);
+            for (let i = 0; i < validMoves.length; i++) {
+                let gameStateCopy = gameState.copy();
+                gameStateCopy.kingPos = validMoves[i];
+                let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
+                beta = Math.max(beta, moveValue);
+                if (beta <= alpha) {
+                    break;
+                }
+                worst = Math.max(worst, moveValue);
+            }
+            return worst;
+        }
+        else {
             let best = Infinity;
             knights.forEach((knight, knightIndex) => {
                 let validMoves = knight.getMoves(gameState.knightPositions[knightIndex]);
@@ -253,21 +266,6 @@ class GameAI {
                 }
             });
             return best;
-        }
-        else {
-            let worst = -Infinity;
-            let validMoves = king.getMoves(gameState.kingPos);
-            for (let i = 0; i < validMoves.length; i++) {
-                let gameStateCopy = gameState.copy();
-                gameStateCopy.kingPos = validMoves[i];
-                let moveValue = this.minimax(treeHeight + 1, false, gameStateCopy, alpha, beta, king, knights) - treeHeight;
-                beta = Math.max(beta, moveValue);
-                if (beta <= alpha) {
-                    break;
-                }
-                worst = Math.max(worst, moveValue);
-            }
-            return worst;
         }
     }
 }
