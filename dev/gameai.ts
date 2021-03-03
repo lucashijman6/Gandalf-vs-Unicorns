@@ -65,7 +65,7 @@ class GameAI {
                     if(treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
                         // If both are the case, save the knight that moves and the move itself
                         this.movingKnight = knights[i];
-                        this.bestMove = gameStateCopy.knightPositions[i];
+                        this.bestMove = validMoves[j];
                     }
 
                     // beta = Math.min(beta, currentMoveValue);

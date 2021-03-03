@@ -252,7 +252,7 @@ class GameAI {
                     let currentMoveValue = this.minimax(treeHeight + 1, true, gameStateCopy, king, knights) + treeHeight;
                     if (treeHeight === 0 && currentMoveValue < bestValueForPlayer) {
                         this.movingKnight = knights[i];
-                        this.bestMove = gameStateCopy.knightPositions[i];
+                        this.bestMove = validMoves[j];
                     }
                     bestValueForPlayer = Math.min(bestValueForPlayer, currentMoveValue);
                 }
