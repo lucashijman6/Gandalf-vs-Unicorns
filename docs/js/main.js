@@ -261,7 +261,7 @@ class GameAI {
         }
     }
 }
-GameAI.maxTreeHeight = 7;
+GameAI.maxTreeHeight = 5;
 class King extends ChessPiece {
     getMoves(from = this.boardPosition) {
         let moves = [];

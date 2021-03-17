@@ -2,7 +2,7 @@
 /// <reference path="tile.ts" />
 
 class GameAI {
-    public static maxTreeHeight: number = 7;
+    public static maxTreeHeight: number = 5;
     public static bestMove: [number, number];
     public static movingKnight: Knight;
 
